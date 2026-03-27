@@ -1,4 +1,17 @@
+# Compiled files
+*.class
+
+# IntelliJ
 .idea/
 *.iml
-target/
+
+# VS Code
+.vscode/
+
+# Mac
+.DS_Store
+
+# Build folders
+bin/
 out/
+target/
