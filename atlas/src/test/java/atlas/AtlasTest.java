@@ -50,7 +50,7 @@ public class AtlasTest {
         String input = "(serve priest (some congregation (that (perform worship))))";
         AtlasNode root = new AtlasParser().parse(input);
         String pretty = new AtlasPrinter().toPrettyString(root);
-        
+
         assertTrue(pretty.contains("\n"));
         assertTrue(pretty.contains("(some"));
         assertTrue(pretty.contains("  (some"));
@@ -60,21 +60,58 @@ public class AtlasTest {
     @Test
     void testRoundTrip() {
         String[] inputs = {
-            "(serve priest)",
-            "(work in scientist (some lab (that (conduct experiment))))"
+                "(serve priest)",
+                "(work in scientist (some lab (that (conduct experiment))))"
         };
-        
+
         AtlasParser parser = new AtlasParser();
         AtlasPrinter printer = new AtlasPrinter();
-        
+
         for (String input : inputs) {
             AtlasNode tree = parser.parse(input);
             String flat = printer.AtlasToFlatString(tree);
             assertEquals(input, flat);
-            
+
             AtlasNode tree2 = parser.parse(flat);
             String flat2 = printer.AtlasToFlatString(tree2);
             assertEquals(flat, flat2);
         }
+    }
+
+
+    // --------------User Story 3 Unit Tests ------------------
+    @Test
+    void testAbstractSimple() {
+        String input = "(serve priest)";
+        AtlasNode root = new AtlasParser().parse(input);
+        AtlasNode abstracted = new AtlasAbstractor().abstractTree(root);
+
+        assertEquals("serve", abstracted.getLabel());
+        assertEquals(1, abstracted.getChildren().size());
+        assertEquals("0", abstracted.getChildren().get(0));
+    }
+
+    @Test
+    void testAbstractNested() {
+        String input = "(serve priest (some congregation (that (perform worship))))";
+        AtlasNode root = new AtlasParser().parse(input);
+        AtlasNode abstracted = new AtlasAbstractor().abstractTree(root);
+
+        assertEquals("(serve 0 (some 1 (that (perform 2))))",
+                new AtlasPrinter().AtlasToFlatString(abstracted));
+    }
+
+    @Test
+    void testAbstractPrettyString() {
+        String input = "(serve priest (some congregation (that (perform worship))))";
+        AtlasNode root = new AtlasParser().parse(input);
+        AtlasNode abstracted = new AtlasAbstractor().abstractTree(root);
+        String pretty = new AtlasPrinter().toPrettyString(abstracted);
+
+        assertTrue(pretty.contains("\n"));
+        assertTrue(pretty.contains("(serve 0"));
+        assertTrue(pretty.contains("  (some 1"));
+        assertTrue(pretty.contains("    (that"));
+        assertTrue(pretty.contains("(perform 2)"));
     }
 }
