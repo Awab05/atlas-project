@@ -8,6 +8,9 @@ public class AtlasParser {
     private int idx;
 
     public AtlasNode parse(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException("Input string cannot be null or empty");
+        }
         String clean = input.replace("(", " ( ").replace(")", " ) ");
         tokens = Arrays.asList(clean.trim().split("\\s+"));
         idx = 0;
@@ -15,6 +18,9 @@ public class AtlasParser {
     }
 
     private AtlasNode parseNode() {
+        if (idx >= tokens.size()) {
+            throw new IllegalArgumentException("unexpected end of input: should be '('");
+        }
         idx++; // skip '('
     
         String label = tokens.get(idx++);
@@ -27,7 +33,10 @@ public class AtlasParser {
                 node.addChild(tokens.get(idx++)); 
             }
         }
-    
+
+        if (idx >= tokens.size() || !tokens.get(idx).equals(")")) {
+            throw new IllegalArgumentException("Missing closing parenthesis for node: " + label);
+        }
         idx++; // skip ')'
         return node;
     }

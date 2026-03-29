@@ -12,6 +12,9 @@ public class AtlasNode {
     }
 
     public void addChild(Object child) {
+        if (!(child instanceof String || child instanceof AtlasNode)) {
+            throw new IllegalArgumentException("child must be a string or an AtlasNode");
+        }
         children.add(child);
     }
 
