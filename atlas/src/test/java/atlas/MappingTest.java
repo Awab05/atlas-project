@@ -44,4 +44,15 @@ public class MappingTest {
             mapping.mapTwoFlatStrings(flat1, flat2);
         });
     }
+
+    @Test
+    public void testNonOneToOneMappingThrows() {
+        Mapping mapping = new Mapping();
+        String flat1 = "(serve *priest (some god) (some spirit))";
+        String flat2 = "(serve *soldier (some leader) (some leader))";
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            mapping.mapTwoFlatStrings(flat1, flat2);
+        });
+    }
 }
