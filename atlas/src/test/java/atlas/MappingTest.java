@@ -6,6 +6,83 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MappingTest {
+
+
+    // ---------- User Story 2.1 Tests -----------
+
+    @Test
+    void testIsMappableNestedTrue() {
+        AtlasParser parser = new AtlasParser();
+        AtlasMapper mapper = new AtlasMapper();
+
+        AtlasNode node1 = parser.parse("(serve priest (some congregation (that (perform worship))))");
+        AtlasNode node2 = parser.parse("(serve soldier (some army (that (perform conquest))))");
+
+        assertTrue(mapper.isMappable(node1, node2));
+    }
+
+    @Test
+    void testIsMappableFalseDifferentStructure() {
+        AtlasParser parser = new AtlasParser();
+        AtlasMapper mapper = new AtlasMapper();
+
+        AtlasNode node1 = parser.parse("(serve priest)");
+        AtlasNode node2 = parser.parse("(serve soldier (some army))");
+
+        assertFalse(mapper.isMappable(node1, node2));
+    }
+
+    @Test
+    void testIsMappableFalseDifferentPredicate() {
+        AtlasParser parser = new AtlasParser();
+        AtlasMapper mapper = new AtlasMapper();
+
+        AtlasNode node1 = parser.parse("(serve priest)");
+        AtlasNode node2 = parser.parse("(work soldier)");
+
+        assertFalse(mapper.isMappable(node1, node2));
+    }
+
+
+    @Test
+    void testIsMappableNullInput() {
+        AtlasParser parser = new AtlasParser();
+        AtlasMapper mapper = new AtlasMapper();
+
+        AtlasNode node1 = parser.parse("(serve priest)");
+
+        assertThrows(IllegalArgumentException.class, () -> mapper.isMappable(node1, null));
+        assertThrows(IllegalArgumentException.class, () -> mapper.isMappable(null, node1));
+    }
+
+    @Test
+    void testGetMappingsNested() {
+        AtlasParser parser = new AtlasParser();
+        AtlasMapper mapper = new AtlasMapper();
+
+        AtlasNode node1 = parser.parse("(serve *priest (some congregation (that (perform worship))))");
+        AtlasNode node2 = parser.parse("(serve *soldier (some army (that (perform conquest))))");
+
+        HashMap<String, String> result = mapper.getMappings(node1, node2);
+
+        assertEquals(3, result.size());
+        assertEquals("*priest", result.get("*soldier"));
+        assertEquals("congregation", result.get("army"));
+        assertEquals("worship", result.get("conquest"));
+    }
+
+    @Test
+    void testGetMappingsFailsStarMismatch() {
+        AtlasParser parser = new AtlasParser();
+        AtlasMapper mapper = new AtlasMapper();
+
+        AtlasNode node1 = parser.parse("(serve *priest)");
+        AtlasNode node2 = parser.parse("(serve soldier)");
+
+        assertThrows(IllegalArgumentException.class, () -> mapper.getMappings(node1, node2));
+    }
+
+
     // ---------User Story 2.2 Tests---------
     @Test
     public void testMismatchedLengthThrows() {
