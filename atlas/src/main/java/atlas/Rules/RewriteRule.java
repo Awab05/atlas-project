@@ -1,11 +1,8 @@
 package atlas.Rules;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RewriteRule {
-    private String originalPredicate;
-    private List<RewriteComponent> components = new ArrayList<>();
+    private final String originalPredicate;
+    private final RewriteComponent component;
 
     public static class RewriteComponent {
         public final boolean isNegated; // starts with "!"
@@ -29,71 +26,72 @@ public class RewriteRule {
         }
     }
 
-    public RewriteRule(String originalPredicate, String rewriteRuleString) {
+    public RewriteRule(String originalPredicate, String ruleString) {
         this.originalPredicate = originalPredicate;
-        parseRewriteRule(rewriteRuleString);
+        this.component = parseRule(ruleString);
     }
 
-    private void parseRewriteRule(String rule) {
+    private RewriteComponent parseRule(String rule) {
         rule = rule.trim();
 
-        boolean isNegated = rule.startsWith("!");
-        if (isNegated) {
-            rule = rule.substring(1);
+        boolean isNegated = false;
+        boolean argsSwapped = false;
+        boolean implicitArgMadeExplicit = false;
+        boolean changed = true;
+
+        // check for modifier flags: !, <, ^
+        while (changed && !rule.isEmpty()) {
+            changed = false;
+
+            if (rule.startsWith("!")) {
+                isNegated = true;
+                rule = rule.substring(1);
+                changed = true;
+            }
+            if (rule.startsWith("<")) {
+                argsSwapped = true;
+                rule = rule.substring(1);
+                changed = true;
+            }
+            if (rule.startsWith("^")) {
+                implicitArgMadeExplicit = true;
+                rule = rule.substring(1);
+                changed = true;
+            }
         }
 
-        boolean argsSwapped = rule.startsWith("<");
-        if (argsSwapped) {
-            rule = rule.substring(1);
-        }
+        String[] ampParts = rule.split("&", 2);
+        String leftPart = ampParts[0].trim();
+        String gerund = ampParts.length > 1 ? ampParts[1].trim() : "";
 
-        boolean implicitArgMadeExplicit = rule.startsWith("^");
-        if (implicitArgMadeExplicit) {
-            rule = rule.substring(1);
-        }
-
-        if (rule.startsWith("!")) {
-            isNegated = true;
-            rule = rule.substring(1);
-        }
-
-        String[] parts = rule.split("&");
-        String gerund = "";
-        if (parts.length > 1) {
-            gerund = parts[1].trim();
-        }
-        String verbPart = parts[0].trim();
-
-        String[] verbPrepositionParts = verbPart.split(":");
-        String verbPreposition = verbPrepositionParts[0];
-        String argument = "";
-        if (verbPrepositionParts.length > 1) {
-            argument = verbPrepositionParts[1];
-        }
+        String[] colonParts = leftPart.split(":", 2);
+        String verbPart = colonParts[0].trim();
+        String argument = colonParts.length > 1 ? colonParts[1].trim() : "";
 
         boolean argumentSwapsPosition = argument.endsWith("*");
-        argument = argument.replace("*", "");
-
-        int lastUnderscore = verbPreposition.lastIndexOf("_");
-        String verb;
-        String preposition;
-        
-        if (lastUnderscore > 0) {
-            verb = verbPreposition.substring(0, lastUnderscore);
-            preposition = verbPreposition.substring(lastUnderscore + 1);
-        } else {
-            verb = verbPreposition;
-            preposition = "";
+        if (argumentSwapsPosition) {
+            argument = argument.substring(0, argument.length() - 1);
         }
 
-        components.add(new RewriteComponent(isNegated, argsSwapped, implicitArgMadeExplicit,verb, preposition, argument, argumentSwapsPosition, gerund));
+        String verb;
+        String preposition = "";
+
+        int underscoreIndex = verbPart.lastIndexOf("_");
+        if (underscoreIndex >= 0) {
+            verb = verbPart.substring(0, underscoreIndex).trim();
+            preposition = verbPart.substring(underscoreIndex + 1).trim();
+        } else {
+            verb = verbPart;
+        }
+
+        return new RewriteComponent(isNegated, argsSwapped, implicitArgMadeExplicit,verb, preposition, argument, argumentSwapsPosition, gerund);
     }
 
     public String getOriginalPredicate() {
         return originalPredicate;
     }
 
-    public List<RewriteComponent> getComponents() {
-        return components;
+    public RewriteComponent getComponent() {
+        return component;
     }
 }
