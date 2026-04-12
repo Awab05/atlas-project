@@ -1,4 +1,4 @@
-package atlas;
+package atlas.Rules;
 
 import java.io.BufferedReader;
 import java.io.IOException;
