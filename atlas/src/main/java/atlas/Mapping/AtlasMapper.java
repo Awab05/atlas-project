@@ -1,7 +1,11 @@
-package atlas;
+package atlas.Mapping;
 
 import java.util.HashMap;
 import java.util.List;
+
+import atlas.AtlasAbstractor;
+import atlas.AtlasNode;
+import atlas.AtlasPrinter;
 
 public class AtlasMapper {
 

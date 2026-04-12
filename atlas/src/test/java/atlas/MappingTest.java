@@ -1,6 +1,10 @@
 package atlas;
 
 import org.junit.jupiter.api.Test;
+
+import atlas.Mapping.AtlasMapper;
+import atlas.Mapping.Mapping;
+
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
