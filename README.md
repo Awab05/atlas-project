@@ -39,3 +39,22 @@ Sprint 3: Structural Rewriting
 
 **Packages**: 
 - `atlas.Mapping` — Core classes: `AtlasMapper`, `Mapping`
+
+## Sprint 3 Completion
+
+**Epic #3: Structural Rewriting**
+- User Story 3.1: Read rewrite-rules from a file
+  - Load rewrite rules from the resource file line by line
+  - Parse each line into a predicate and one or more rewrite rules
+  - Store the loaded rules in a lookup structure for later use
+  
+- User Story 3.2: Rewrite conceptual structures using the loaded rules
+  - Parse individual rewrite rules into structured components
+  - Support rule features such as negation, argument swapping, implicit argument expansion, inserted arguments, prepositions, and gerund wrappers
+  - Rewrite an `AtlasNode` into one or more more-general conceptual structures using the loaded rules
+  - Support recursive rewriting of nested structures
+
+**Status**: Complete (10/10 tests passing)
+
+**Packages**:
+- `atlas.Rules` — Core classes: `RewriteRuleLoader`, `RewriteRule`, `RewriteStructure`
