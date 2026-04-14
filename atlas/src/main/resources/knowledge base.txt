@@ -1,0 +1,3 @@
+(if (can (exercise *athlete muscle)))
+(dislike *rival colleague)
+(lose_control_over *captain mutineer)

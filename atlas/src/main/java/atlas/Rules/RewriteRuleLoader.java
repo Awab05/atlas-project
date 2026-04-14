@@ -49,11 +49,9 @@ public class RewriteRuleLoader {
                 for (String rewrite : rewrites) {
                     rules.get(predicate).add(rewrite.trim());
                 }
-
+            }
         }
-
     }
-}
 
     public HashMap<String, List<String>> getRules() {
         return rules;
