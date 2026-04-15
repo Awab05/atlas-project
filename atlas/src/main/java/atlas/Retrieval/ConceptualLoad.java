@@ -50,14 +50,18 @@ public class ConceptualLoad {
         String label = node.getLabel();
         HashSet<String> topics = new HashSet<>();
 
-        if (label.charAt(0) == '*'){
+        if (!label.isEmpty() && label.charAt(0) == '*') {
             topics.add(label.substring(1));
-        } 
-        
-        for (Object child: node.getChildren()){
-            if (child instanceof AtlasNode) {
-                HashSet<String> childTopics = extractTopics((AtlasNode) child);
-                topics.addAll(childTopics);
+        }
+
+        for (Object child : node.getChildren()) {
+            if (child instanceof String) {
+                String childString = (String) child;
+                if (!childString.isEmpty() && childString.charAt(0) == '*') {
+                    topics.add(childString.substring(1));
+                }
+            } else if (child instanceof AtlasNode) {
+                topics.addAll(extractTopics((AtlasNode) child));
             }
         }
         return topics;
