@@ -29,6 +29,9 @@ public class ConceptualLoad {
 
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
 
                 AtlasNode node = parser.parse(line);
                 HashSet<String> topics = extractTopics(node);

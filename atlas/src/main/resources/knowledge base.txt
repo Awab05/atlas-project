@@ -1,3 +1,27 @@
-(if (can (exercise *athlete muscle)))
+(serve *priest (some congregation (that (perform worship))))
+(guide *priest follower)
+(speak_to *priest congregation)
+
+(serve *teacher (some classroom (that (perform teaching))))
+(guide *teacher student)
+(speak_to *teacher class)
+
+(serve *soldier (some army (that (perform conquest))))
+(guide *soldier recruit)
+(speak_to *soldier troops)
+
+(serve *doctor (some hospital (that (perform healing))))
+(guide *doctor patient)
+(speak_to *doctor family)
+
+(paint *artist canvas)
+(admire *artist beauty)
+(speak_to *artist audience)
+
 (dislike *rival colleague)
+(oppose *rival leader)
+(argue_with *rival opponent)
+
 (lose_control_over *captain mutineer)
+(command *captain crew)
+(speak_to *captain sailors)
