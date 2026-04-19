@@ -25,3 +25,8 @@
 (lose_control_over *captain mutineer)
 (command *captain crew)
 (speak_to *captain sailors)
+(lose_control_over *captain mutineer)
+(by helping(support *mentor *student(with guidance)))
+
+(if (can (exercise *athlete muscle)))
+(lose_control_over *captain mutineer)

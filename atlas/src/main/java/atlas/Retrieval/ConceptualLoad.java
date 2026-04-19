@@ -15,7 +15,6 @@ public class ConceptualLoad {
     HashMap<String, List<AtlasNode>> topicRetrievalMap;
     
     
-
     public ConceptualLoad() throws IOException {
         InputStream input = getClass().getClassLoader().getResourceAsStream("knowledge base.txt");
         if (input == null) {
@@ -23,6 +22,7 @@ public class ConceptualLoad {
         }
         this.topicRetrievalMap = new HashMap<>();
 
+        // reads the knowledge base line by line, parses it into AtlasNodes, and indexes them by topic
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
             String line;
             AtlasParser parser = new AtlasParser();
@@ -57,6 +57,7 @@ public class ConceptualLoad {
             topics.add(label.substring(1));
         }
 
+        // recursively checks children for topic markers
         for (Object child : node.getChildren()) {
             if (child instanceof String) {
                 String childString = (String) child;
@@ -71,6 +72,7 @@ public class ConceptualLoad {
     }
 
     public List<AtlasNode> retrieveStructures(String topic) {
+        //returns empty list if topic not found
         if (!topicRetrievalMap.containsKey(topic)) {
             System.err.println("Topic not found: " + topic);
             return new java.util.ArrayList<>();
