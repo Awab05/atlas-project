@@ -81,7 +81,7 @@ Sprint 3: Structural Rewriting
   - Sum richness scores across all shared mappable structures
   - Return source concepts ranked from highest to lowest analogy score
 
-**Status**: Complete (6/6 tests passing)
+**Status**: Complete (9/9 tests passing)
 
 **Packages**:
 - `atlas.Retrieval` — Core classes: `ConceptualLoad`, `AtlasRetriever`
