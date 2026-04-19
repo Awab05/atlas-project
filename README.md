@@ -58,3 +58,30 @@ Sprint 3: Structural Rewriting
 
 **Packages**:
 - `atlas.Rules` — Core classes: `RewriteRuleLoader`, `RewriteRule`, `RewriteStructure`
+
+
+## Sprint 4 Completion
+
+**Epic #4: Analogue Retrieval**
+- User Story 4.1: Load a knowledge-base of conceptual structures into memory and index it for efficient access and retrieval
+  - Read conceptual structures from the knowledge base file
+  - Parse each structure into an `AtlasNode`
+  - Extract starred topics and index structures by topic in memory
+  
+- User Story 4.2: Retrieve all conceptual structures about a topic T from the knowledge-base
+  - Return all structures associated with a given topic
+  - A structure is treated as being about topic `T` if it contains the symbol `*T`
+  
+- User Story 4.3: Retrieve all possible source concepts S for a target concept T from the knowledge-base
+  - Compare structures about `T` with structures about all other topics
+  - Return every topic that has at least one structurally mappable pair with the target topic
+  
+- User Story 4.4: Rank the possible analogies S for T by structural richness
+  - Compute a structural richness score for mappable structure pairs
+  - Sum richness scores across all shared mappable structures
+  - Return source concepts ranked from highest to lowest analogy score
+
+**Status**: Complete (6/6 tests passing)
+
+**Packages**:
+- `atlas.Retrieval` — Core classes: `ConceptualLoad`, `AtlasRetriever`
