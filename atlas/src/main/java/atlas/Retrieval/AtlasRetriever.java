@@ -1,11 +1,11 @@
 package atlas.Retrieval;
 
-import atlas.AtlasNode;
-import atlas.Mapping.AtlasMapper;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
+import atlas.AtlasNode;
+import atlas.Mapping.AtlasMapper;
 
 public class AtlasRetriever {
 
@@ -15,6 +15,14 @@ public class AtlasRetriever {
     public AtlasRetriever(ConceptualLoad loader, AtlasMapper mapper) {
         this.loader = loader;
         this.mapper = mapper;
+    }
+
+    public AtlasMapper getMapper() {
+        return mapper;
+    }
+
+    public ConceptualLoad getConceptualLoad() {
+        return loader;
     }
 
     // this method takes a target topic and checks all structures related to it
@@ -49,9 +57,7 @@ public class AtlasRetriever {
         }
         return false;
     }
-
-
-    //returns a list of source concepts ranked from strongest to weakest based on a target.
+        //returns a list of source concepts ranked from strongest to weakest based on a target.
     //does this by firstly getting ll valid source concepts using getSourceConcepts
     //then it scores each source concept against the target topic
     //then at the end it sorts them in descending order of score
@@ -76,7 +82,7 @@ public class AtlasRetriever {
     //helper function that calculates the total richness score between 2 topics
     //does this by comparing every target structure with every source structure
     //if 2 structures are mappable it adds the richness of both structures to the total
-    private int totalAnalogyScore(List<AtlasNode> targetStructures, List<AtlasNode> sourceStructures) {
+    public int totalAnalogyScore(List<AtlasNode> targetStructures, List<AtlasNode> sourceStructures) {
         int totalScore = 0;
 
         for (AtlasNode targetNode : targetStructures) {
