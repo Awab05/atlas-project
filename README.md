@@ -56,6 +56,8 @@ Sprint 3: Structural Rewriting
 
 **Status**: Complete (10/10 tests passing)
 
+
+
 **Packages**:
 - `atlas.Rules` — Core classes: `RewriteRuleLoader`, `RewriteRule`, `RewriteStructure`
 
@@ -85,3 +87,29 @@ Sprint 3: Structural Rewriting
 
 **Packages**:
 - `atlas.Retrieval` — Core classes: `ConceptualLoad`, `AtlasRetriever`
+
+
+## Sprint 5 Completion
+
+**Epic #5: Rich Analogies**
+- User Story 5.1: Produce the largest and richest analogy from a source concept S to a target concept T
+  - Compare all conceptual structures for the source and target topics
+  - Find all mappable structure pairs and extract their mappings
+  - Coalesce consistent mappings across multiple structures
+  - Return the largest consistent composite analogy between S and T
+  
+- User Story 5.2: Rank composite analogies from S to T in terms of mapping richness
+  - Retrieve all consistent composite analogies between a source and target topic
+  - Measure mapping richness as the number of distinct mapped elements
+  - Sort composite analogies in descending order of richness
+  
+- User Story 5.3: Return the top n source concepts for a target concept T
+  - Retrieve all possible source concepts for the target topic
+  - Compute the richest composite analogy for each source concept
+  - Score each source concept by the size of its best composite mapping
+  - Return the top n source concepts ranked by analogy richness
+
+**Status**: Complete (14/14 tests passing)
+
+**Packages**:
+- `atlas.Analogy` — Core classes: `RichAnalogy`, `AnalogyRanker`, `TopAnalogyRetriever`
