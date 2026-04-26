@@ -71,6 +71,51 @@ public class RichAnalogy {
         
         return largestMapping;
     }
+
+    // Uses the same logic as largestRichAnalogy, but instead of returning only
+    // the single largest analogy, it returns all consistent composite analogies.
+    public List<HashMap<String, String>> getAllRichAnalogies(String targetTopic, String sourceTopic) {
+        if (targetTopic == null || sourceTopic == null) {
+            throw new IllegalArgumentException("Topics cannot be null");
+        }
+
+        List<AtlasNode> targetStructures = retriever.getConceptualLoad().retrieveStructures(targetTopic);
+        List<AtlasNode> sourceStructures = retriever.getConceptualLoad().retrieveStructures(sourceTopic);
+        List<HashMap<String, String>> allAnalogies = new ArrayList<>();
+
+        if (targetStructures.isEmpty() || sourceStructures.isEmpty()) {
+            return allAnalogies;
+        }
+
+        List<MappingPair> mappablePairs = findAllMappablePairs(targetStructures, sourceStructures);
+        if (mappablePairs.isEmpty()) {
+            return allAnalogies;
+        }
+
+        List<List<Integer>> allSubsets = generateSubsets(mappablePairs.size());
+
+        for (List<Integer> subset : allSubsets) {
+            HashMap<String, String> combinedMapping = new HashMap<>();
+            boolean isConsistent = true;
+
+            for (int index : subset) {
+                HashMap<String, String> pairMapping = mappablePairs.get(index).mapping;
+
+                if (!isMappingConsistent(combinedMapping, pairMapping)) {
+                    isConsistent = false;
+                    break;
+                }
+
+                combinedMapping.putAll(pairMapping);
+            }
+
+            if (isConsistent && !combinedMapping.isEmpty()) {
+                allAnalogies.add(new HashMap<>(combinedMapping));
+            }
+        }
+
+        return allAnalogies;
+    }
     
     // finds all mappable pairs of (targetNode, sourceNode) by evaluating each
     // target structure against each source structure.
