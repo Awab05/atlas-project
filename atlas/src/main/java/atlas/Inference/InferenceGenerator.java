@@ -1,11 +1,12 @@
 package atlas.Inference;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import atlas.AtlasNode;
 import atlas.Mapping.AtlasMapper;
 import atlas.Retrieval.ConceptualLoad;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class InferenceGenerator {
 
@@ -32,7 +33,7 @@ public class InferenceGenerator {
 
         List<AtlasNode> sourceStructures = loader.retrieveStructures(sourceTopic);
         List<AtlasNode> targetStructures = loader.retrieveStructures(targetTopic);
-        List<AtlasNode> candidateInferences = new java.util.ArrayList<>();
+        List<AtlasNode> candidateInferences = new ArrayList<>();
 
         for (AtlasNode sourceStructure : sourceStructures) {
             if (isFullyMapped(sourceStructure, compositeMapping)) {
@@ -45,7 +46,6 @@ public class InferenceGenerator {
         }
 
         return candidateInferences;
-
     }
 
     private boolean isFullyMapped(AtlasNode sourceStructure, HashMap<String, String> compositeMapping) {
