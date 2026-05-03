@@ -113,3 +113,28 @@ Sprint 3: Structural Rewriting
 
 **Packages**:
 - `atlas.Analogy` — Core classes: `RichAnalogy`, `AnalogyRanker`, `TopAnalogyRetriever`
+
+## Sprint 6 Completion
+
+**Epic #6: Candidate Inferences**
+- User Story 6.1: Generate all valid candidate inferences for a target topic T from a source topic S
+  - Retrieve source and target structures from the knowledge base
+  - Check whether each source structure is fully covered by the composite mapping from Sprint 5
+  - Apply the composite mapping to build inferred target-side structures
+  - Filter out inferred structures that already have an analogue in the target topic
+  - Return the remaining structures as candidate inferences
+  
+- User Story 6.2: Coalesce all consistent candidate inferences for T from S into grouped structures with a single coherent mapping
+  - Group structurally consistent candidate inferences together
+  - Preserve the shared base mapping across each coalesced group
+  - Return coalesced inference sets with unified mappings and grouped inferred structures
+  
+- User Story 6.3: Rank all coalesced candidate inferences by aggregate mapping quality
+  - Compute a quality score for each coalesced inference using mapped source-target structures and inferred structures
+  - Measure richness using structural depth and weighted node counts
+  - Rank coalesced inferences in descending order of quality
+
+**Status**: Complete (11/11 tests passing)
+
+**Packages**:
+- `atlas.Inference` — Core classes: `InferenceGenerator`, `CandidateInferenceCoalescer`, `InferenceRanker`
