@@ -1,12 +1,11 @@
 package atlas.Inference;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import atlas.AtlasNode;
 import atlas.Mapping.AtlasMapper;
 import atlas.Retrieval.ConceptualLoad;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class InferenceGenerator {
 
@@ -18,6 +17,10 @@ public class InferenceGenerator {
         this.mapper = mapper;
     }
 
+    // main method for generating candidate inferences.
+    // firstly we get the source and target structures.
+    // then for each source structure, if all the non-predicate symbols are mapped,
+    // we build the inferred version and add it if it doesnt already exist in the target.
     public List<AtlasNode> generateCandidateInferences(
             String targetTopic,
             String sourceTopic,
@@ -33,7 +36,7 @@ public class InferenceGenerator {
 
         List<AtlasNode> sourceStructures = loader.retrieveStructures(sourceTopic);
         List<AtlasNode> targetStructures = loader.retrieveStructures(targetTopic);
-        List<AtlasNode> candidateInferences = new ArrayList<>();
+        List<AtlasNode> candidateInferences = new java.util.ArrayList<>();
 
         for (AtlasNode sourceStructure : sourceStructures) {
             if (isFullyMapped(sourceStructure, compositeMapping)) {
@@ -46,8 +49,11 @@ public class InferenceGenerator {
         }
 
         return candidateInferences;
+
     }
 
+    // checks if all the non-predicate strings in the source structure are in the composite mapping.
+    // if one is missing, then we cant map that structure over properly.
     private boolean isFullyMapped(AtlasNode sourceStructure, HashMap<String, String> compositeMapping) {
         for (Object child : sourceStructure.getChildren()) {
             if (child instanceof String) {
@@ -64,6 +70,9 @@ public class InferenceGenerator {
         return true;
     }
 
+    // applies the composite mapping to the source structure and builds the inferred version.
+    // the predicate stays the same, but the non-predicate symbols get replaced using the mapping.
+    // if theres a nested structure, we just do the same thing again recursively.
     private AtlasNode applyMapping(AtlasNode sourceStructure, HashMap<String, String> compositeMapping) {
         AtlasNode mappedNode = new AtlasNode(sourceStructure.getLabel());
 
@@ -79,6 +88,8 @@ public class InferenceGenerator {
         return mappedNode;
     }
 
+    // checks if the inferred structure already matches something in the target topic.
+    // if it does, then we dont keep it as a candidate inference.
     private boolean alreadyExistsInTarget(AtlasNode mappedInference, List<AtlasNode> targetStructures) {
         for (AtlasNode targetStructure : targetStructures) {
             if (mapper.isMappable(mappedInference, targetStructure)) {
