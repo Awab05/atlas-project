@@ -11,7 +11,6 @@ public class InferenceRanker {
 
     private final ConceptualLoad loader;
     private final AtlasMapper mapper;
-    private static final double BETA = 3.0, ALPHA = 1.0; // parameters for quality calculation based on the paper
 
     public InferenceRanker(ConceptualLoad loader, AtlasMapper mapper) {
         this.loader = loader;
@@ -40,17 +39,19 @@ public class InferenceRanker {
 
     private double calculateQuality(CandidateInferenceCoalescer.CoalescedInference c, String target, String source) {
         double quality = 0.0;
+        double beta = InferenceConfig.getBeta();
+        double alpha = InferenceConfig.getAlpha();
 
         for (AtlasNode src : loader.retrieveStructures(source)) {
             for (AtlasNode tgt : loader.retrieveStructures(target)) {
                 if (mapper.isMappable(src, tgt)) {
-                    quality += Math.pow(calculateRichness(src), BETA);
+                    quality += Math.pow(calculateRichness(src), beta);
                 }
             }
         }
 
         for (AtlasNode inf : c.getCoalescedInferences()) {
-            quality += ALPHA * Math.pow(calculateRichness(inf), BETA);
+            quality += alpha * Math.pow(calculateRichness(inf), beta);
         }
 
         return quality;

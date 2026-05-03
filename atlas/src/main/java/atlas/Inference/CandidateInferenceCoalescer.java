@@ -29,8 +29,7 @@ public class CandidateInferenceCoalescer {
         public int getMappingSize() { return unifiedMapping.size(); }
     }
 
-    public List<CoalescedInference> coalesce(String target, String source,
-            List<AtlasNode> inferences, HashMap<String, String> baseMapping) {
+    public List<CoalescedInference> coalesce(String target, String source, List<AtlasNode> inferences, HashMap<String, String> baseMapping) {
 
         if (target == null || source == null || inferences == null || baseMapping == null) {
             throw new IllegalArgumentException("Arguments cannot be null");
